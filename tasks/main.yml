@@ -1,0 +1,50 @@
+---
+# simple_firewalld_configuration/tasks/main.yml
+
+- name: 'Allow ports in firewalld'
+  ansible.posix.firewalld:
+    zone: "{{ firewalld_zone }}"
+    port: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: 'enabled'
+  loop: "{{ firewalld_ports_enabled }}"
+  when:
+    - 'firewalld_ports_enabled is defined'
+    - 'firewalld_ports_enabled | length != 0'
+
+- name: 'Disallow ports in firewalld'
+  ansible.posix.firewalld:
+    zone: "{{ firewalld_zone }}"
+    port: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: 'disabled'
+  loop: "{{ firewalld_ports_disabled }}"
+  when:
+    - 'firewalld_ports_disabled is defined'
+    - 'firewalld_ports_disabled | default("") | length > 0'
+
+- name: 'Allow services in firewalld'
+  ansible.posix.firewalld:
+    zone: "{{ firewalld_zone }}"
+    service: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: 'enabled'
+  loop: "{{ firewalld_services_enabled }}"
+  when:
+    - 'firewalld_services_enabled is defined'
+    - 'firewalld_services_enabled | length != 0'
+
+- name: 'Disallow services in firewalld'
+  ansible.posix.firewalld:
+    zone: "{{ firewalld_zone }}"
+    service: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: 'disabled'
+  loop: "{{ firewalld_services_disabled }}"
+  when:
+    - 'firewalld_services_disabled is defined'
+    - 'firewalld_services_disabled | length != 0'

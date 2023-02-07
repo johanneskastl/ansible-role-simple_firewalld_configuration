@@ -1,0 +1,4 @@
+---
+# simple_firewalld_configuration/defaults/main.yml
+
+firewalld_zone: 'public'
